@@ -1,4 +1,4 @@
-library in_app_version_control;
+library;
 
 export 'src/client.dart';
 export 'src/models.dart';

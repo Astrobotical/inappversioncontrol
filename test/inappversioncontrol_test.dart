@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:inappversioncontrol/in_app_version_control.dart';
+import '../lib/in_app_version_control.dart';
 
 class FakeProvider implements VersionRuleProvider {
   @override

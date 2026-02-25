@@ -5,7 +5,7 @@ class VersionRule {
   final String latestVersion;  // The latest version available, used for display and to determine if the user is up to date
   final String? storeUrl;       // URL to the app store page for the latest version, used for directing users to update.
   final String? message;       // An optional message to display to users when an update is recommended, can be used to provide additional context or instructions.
-
+  final bool maintenance;      // If true, the app is in maintenance mode and should not be used regardless of version. This overrides all other checks.
   const VersionRule({
     required this.minVersion,
     required this.latestVersion,
@@ -42,6 +42,7 @@ class UpdateDecision {
         currentVersion: currentVersion,
         minVersion: minVersion,
         latestVersion: latestVersion,
+
       );
 
   factory UpdateDecision.optional({

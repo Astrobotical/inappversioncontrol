@@ -14,7 +14,7 @@ class InAppVersionControl {
   }) async {
     final rule = await provider.fetchRule(appId: appId, platform: platform);
 
-    // Maintenance overrides everything
+    // Maintenance overrides everything, so if maintenance is true, we return that immediately
     if (rule.maintenance) {
       return UpdateDecision.maintenance(
         currentVersion: currentVersion,
