@@ -1,6 +1,6 @@
 import 'models.dart';
 import 'provider.dart';
-import 'version_compare.dart';
+import 'versionCompare.dart';
 
 class InAppVersionControl {
   final VersionRuleProvider provider;
