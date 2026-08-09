@@ -1,11 +1,25 @@
 enum UpdateType { none, optional, force, maintenance }
 
+enum AppPlatform {
+  android('android'),
+  ios('ios'),
+  web('web'),
+  macos('macos'),
+  windows('windows'),
+  linux('linux');
+
+  final String value;
+
+  const AppPlatform(this.value);
+}
+
 class VersionRule {
-  final String minVersion;     // Anything below this should trigger the package to recommend an update (force if below min, optional if between min and latest)
-  final String latestVersion;  // The latest version available, used for display and to determine if the user is up to date
-  final String? storeUrl;       // URL to the app store page for the latest version, used for directing users to update.
-  final String? message;       // An optional message to display to users when an update is recommended, can be used to provide additional context or instructions.
-  final bool maintenance;      // If true, the app is in maintenance mode and should not be used regardless of version. This overrides all other checks.
+  final String minVersion;
+  final String latestVersion;
+  final String? storeUrl;
+  final String? message;
+  final bool maintenance;
+
   const VersionRule({
     required this.minVersion,
     required this.latestVersion,
@@ -13,6 +27,26 @@ class VersionRule {
     this.message,
     this.maintenance = false,
   });
+
+  factory VersionRule.fromJson(Map<String, dynamic> json) {
+    return VersionRule(
+      minVersion: json['minVersion'] as String,
+      latestVersion: json['latestVersion'] as String,
+      storeUrl: json['storeUrl'] as String?,
+      message: json['message'] as String?,
+      maintenance: json['maintenance'] as bool? ?? false,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'minVersion': minVersion,
+      'latestVersion': latestVersion,
+      'storeUrl': storeUrl,
+      'message': message,
+      'maintenance': maintenance,
+    };
+  }
 }
 
 class UpdateDecision {
@@ -36,14 +70,12 @@ class UpdateDecision {
     required String currentVersion,
     required String minVersion,
     required String latestVersion,
-  }) =>
-      UpdateDecision._(
-        type: UpdateType.none,
-        currentVersion: currentVersion,
-        minVersion: minVersion,
-        latestVersion: latestVersion,
-
-      );
+  }) => UpdateDecision._(
+    type: UpdateType.none,
+    currentVersion: currentVersion,
+    minVersion: minVersion,
+    latestVersion: latestVersion,
+  );
 
   factory UpdateDecision.optional({
     required String currentVersion,
@@ -51,15 +83,14 @@ class UpdateDecision {
     required String latestVersion,
     String? storeUrl,
     String? message,
-  }) =>
-      UpdateDecision._(
-        type: UpdateType.optional,
-        currentVersion: currentVersion,
-        minVersion: minVersion,
-        latestVersion: latestVersion,
-        storeUrl: storeUrl,
-        message: message,
-      );
+  }) => UpdateDecision._(
+    type: UpdateType.optional,
+    currentVersion: currentVersion,
+    minVersion: minVersion,
+    latestVersion: latestVersion,
+    storeUrl: storeUrl,
+    message: message,
+  );
 
   factory UpdateDecision.force({
     required String currentVersion,
@@ -67,27 +98,27 @@ class UpdateDecision {
     required String latestVersion,
     String? storeUrl,
     String? message,
-  }) =>
-      UpdateDecision._(
-        type: UpdateType.force,
-        currentVersion: currentVersion,
-        minVersion: minVersion,
-        latestVersion: latestVersion,
-        storeUrl: storeUrl,
-        message: message,
-      );
+  }) => UpdateDecision._(
+    type: UpdateType.force,
+    currentVersion: currentVersion,
+    minVersion: minVersion,
+    latestVersion: latestVersion,
+    storeUrl: storeUrl,
+    message: message,
+  );
 
   factory UpdateDecision.maintenance({
     required String currentVersion,
     required String minVersion,
     required String latestVersion,
     String? message,
-  }) =>
-      UpdateDecision._(
-        type: UpdateType.maintenance,
-        currentVersion: currentVersion,
-        minVersion: minVersion,
-        latestVersion: latestVersion,
-        message: message,
-      );
+  }) => UpdateDecision._(
+    type: UpdateType.maintenance,
+    currentVersion: currentVersion,
+    minVersion: minVersion,
+    latestVersion: latestVersion,
+    message: message,
+  );
+
+  bool get requiresAction => type != UpdateType.none;
 }

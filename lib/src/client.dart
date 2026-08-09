@@ -1,6 +1,6 @@
 import 'models.dart';
 import 'provider.dart';
-import 'versionCompare.dart';
+import 'version_compare.dart';
 
 class InAppVersionControl {
   final VersionRuleProvider provider;
@@ -9,7 +9,7 @@ class InAppVersionControl {
 
   Future<UpdateDecision> check({
     required String appId,
-    required String platform,
+    required AppPlatform platform,
     required String currentVersion,
   }) async {
     final rule = await provider.fetchRule(appId: appId, platform: platform);
